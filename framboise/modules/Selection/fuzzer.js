@@ -46,6 +46,13 @@ var fuzzerSelection = (function() {
       cmd.push(o.add("Range") + " = " + o.pick("Selection") + ".getRangeAt(" + getRangeNumber() + ");")
     }
 
+    if (choice === 5) {
+      let newRange = o.add("Range")
+      let newCmd = newRange + " = document.createRange(); "
+      newCmd += newRange + ".selectNodeContents(" + utils.script.getRandomElement() + ");"
+      cmd.push(newCmd)
+    }
+
     return cmd
   }
 
