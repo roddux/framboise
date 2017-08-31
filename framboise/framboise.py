@@ -647,9 +647,11 @@ class Framboise(object):
 
         self.runner.plugin.wait(self.config['default']['process_timeout'])
 
-        logging.info('Exit code: {}'.format(self.runner.plugin.process.returncode))
-
-        if self.runner.plugin.process.returncode != 0:
+        ignored_codes = (0, -9, -15)
+        if self.runner.plugin.process.returncode in ignored_codes:
+            logging.info('Ignoring exit code: {}'.format(self.runner.plugin.process.returncode))
+        else:
+            logging.info('Caught exit code: {}'.format(self.runner.plugin.process.returncode))
             self._check_for_faults()
 
     @staticmethod
