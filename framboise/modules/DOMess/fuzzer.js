@@ -74,7 +74,7 @@ var fuzzerDOMess = (function() {
     var tableInnards = ["thead","tfoot","th","tr","tbody"];
 
     for (let i = 0; i < tableInnards.length; i++) {
-      o.add(tableInnards[i])
+      cmds.push(o.add(tableInnards[i]) + " = document.createElement('" + tableInnards[i] + "');");
     }
 
     // Randomly add table innards to a table
