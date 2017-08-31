@@ -53,6 +53,10 @@ var fuzzerSelection = (function() {
       cmd.push(newCmd)
     }
 
+    if (choice === 6) {
+      cmd.push(o.pick("Range") + ".selectNodeContents(" + utils.script.getRandomElement() + ");")
+    }
+
     return cmd
   }
 
