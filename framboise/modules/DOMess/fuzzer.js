@@ -36,7 +36,7 @@ var fuzzerDOMess = (function() {
       var mcmd1 = cobj + ' = document.createElement("' + newEl + '");';
       icmd.push(mcmd1);
 
-      var mcmd2 = JS.addElementToBody(cobj);
+      var mcmd2 = utils.script.addElementToBody(cobj);
       objsInBody.push(cobj);
       icmd.push(mcmd2);
     }
@@ -67,12 +67,19 @@ var fuzzerDOMess = (function() {
   function tableGen() {
     var table = o.add("table");
     var tCmd1 = table + " = document.createElement(\"table\");";
-    var tCmd2 = JS.addElementToBody(table);
+    var tCmd2 = utils.script.addElementToBody(table);
     var cmds  = [tCmd1, tCmd2];
+
+    // o.pick can throw if the random.pick below doesn't give at least one of each
+    var tableInnards = ["thead","tfoot","th","tr","tbody"];
+
+    for (let i = 0; i < tableInnards.length; i++) {
+      o.add(tableInnards[i])
+    }
 
     // Randomly add table innards to a table
     for (var j = 0; j < 20; j++) {
-      var newEl = random.pick(["thead","tfoot","th","tr","tbody"]);
+      var newEl = random.pick(tableInnards);
       var cobj  = o.add(newEl);
       var mcmd1 = cobj + ' = document.createElement("' + newEl + '");';
       cmds.push(mcmd1);
@@ -83,12 +90,12 @@ var fuzzerDOMess = (function() {
 
     // Add some specific table innards
     for (var j = 0; j < 20; j++) {
-      var newEl = random.pick(["thead","tfoot","th","tr","tbody"]);
+      var newEl = random.pick(tableInnards);
       var cobj  = o.add(newEl);
       var mcmd1 = cobj + ' = document.createElement("' + newEl + '");';
       cmds.push(mcmd1);
 
-      var mcmd2 = o.pick(random.pick(["thead","tfoot","th","tr","tbody"])) + ".appendChild(" + cobj + ");";
+      var mcmd2 = o.pick(random.pick(tableInnards)) + ".appendChild(" + cobj + ");";
       cmds.push(mcmd2);
     }
     return cmds;
