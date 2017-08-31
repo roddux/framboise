@@ -396,19 +396,9 @@ class FirefoxPlugin(ExternalProcess):
         preferences = self.build_path(self.configuration['preferences'])
         if not preferences or not os.path.exists(preferences):
             raise PluginException('{} not found.'.format(preferences))
-
         self.profile_folder = tempfile.mkdtemp()
-        profile_name = os.path.basename(self.profile_folder)
-        cmd = [
-            application,
-            '-no-remote',
-            '-CreateProfile',
-            '{} {}'.format(profile_name, self.profile_folder)
-        ]
-        self.call(cmd, self.setup_environ(environment))
         shutil.copyfile(preferences, os.path.join(self.profile_folder, 'user.js'))
-
-        cmd = [application, '-P', profile_name]
+        cmd = [application, '--profile', self.profile_folder]
         cmd.extend(arguments.split())
         cmd.append(self.target)
         self.process = self.open(cmd, self.setup_environ(environment))
